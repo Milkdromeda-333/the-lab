@@ -1,0 +1,8 @@
+- I was able to get my tsconfig working by setting this is tsconfig 
+`,
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    ""
+  ]` and just look att the config for the rest chile
