@@ -1,0 +1,2 @@
+- WHEWWW. I was debugging an issue with importing a module. I went through a lot and went down some paths that seemed promising but ultimately did not fix my issue.
+Eventually i looked at a tutorial for a todo list in typescript by web dev simplified and he mentioned that I'll need to use a bunder to do node imports. And, by golly it worked.

@@ -1,3 +1,13 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+import { getAllTodos, createTodo } from "./apiCalls";
 const form = document.forms[0];
 const list = document.getElementById('list');
 function appendListItem(task) {
@@ -5,9 +15,9 @@ function appendListItem(task) {
     const taskNode = createElement({ type: 'li', classes: ["list-container__task"] });
     // CREATE TASK
     const input = createElement({ type: { element: 'input', inputType: "checkbox" }, classes: ["list-container__task--incomplete", "list-container__task"] });
-    input.setAttribute("id", task);
-    const label = createElement({ type: "label", content: task });
-    label.setAttribute("for", task);
+    input.setAttribute("id", task.todo);
+    const label = createElement({ type: "label", content: task.todo });
+    label.setAttribute("for", task.todo);
     taskNode.insertAdjacentElement("beforeend", input);
     taskNode.insertAdjacentElement("beforeend", label);
     // CREATE EDIT BUTTON
@@ -55,14 +65,32 @@ function editTask() {
 function deleteTask() {
     console.log("delete");
 }
+function addTodosOnLoad() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const fetchedTodos = yield getAllTodos();
+        for (let i = 0; i <= fetchedTodos.length; i++) {
+            appendListItem(fetchedTodos[i]);
+        }
+    });
+}
+addTodosOnLoad();
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const taskTitle = document.getElementById('task').value;
-    if (taskTitle === null || taskTitle === undefined) {
-        // set error logic before this can work
+    if (document.getElementById("task").value == null || document.getElementById("task").value == undefined) {
+        console.log("Has to have a value!");
         toggleError();
-        console.log("Task title = ", typeof taskTitle);
+        return;
     }
-    appendListItem(taskTitle);
+    const res = createTodo(document.getElementById("task").value);
+    if (res instanceof Error) {
+        console.log("An error has ocurred! : ", res);
+        toggleError();
+        return;
+    }
+    const newItem = {
+        todo: document.getElementById("task").value,
+        isCompleted: false,
+        _id: res
+    };
+    appendListItem(newItem);
 });
-export {};

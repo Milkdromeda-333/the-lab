@@ -1,19 +1,22 @@
 const express = require('express');
 const morgan = require('morgan');
-const ConnectDB = require('./db/dbConnection');
 const mongoose = require('mongoose');
-const Todo = require('./models/todo');
+const cors = require('cors');
+
+const ToDo = require('./models/todo');
+const ConnectDB = require('./db/dbConnection');
 
 const app = express();
 const PORT = 3030;
 
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cors());
 
 //get all todos
 app.get('/todo', async (req, res, next) => {
     try {
-        const allTodos = await Todo.find();
+        const allTodos = await ToDo.find();
         res.send(allTodos);
     } catch (err) {
         console.log(err);
@@ -23,8 +26,9 @@ app.get('/todo', async (req, res, next) => {
 
 // create a Todo
 app.post('/todo', async (req, res, next) => {
+    console.log(req.body);
     try {
-        const newTodo = new Todo(req.body);
+        const newTodo = new ToDo(req.body);
         const response = await newTodo.save();
         res.status(201).send(response._id);
     } catch (err) {
@@ -36,9 +40,28 @@ app.post('/todo', async (req, res, next) => {
 // delete a Todo
 app.delete('/todo/:id', async (req, res, next) => {
     try {
-        await Todo.deleteOne({ _id: req.params.id });
+        await ToDo.deleteOne({ _id: req.params.id });
         res.status(200).send();
     } catch {
+        console.log(err);
+        next(err);
+    }
+});
+
+// update item
+app.put('/todo/:id', (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const item = ToDo.find({ _id: id });
+
+        const updatedItem = {
+            ...item,
+            ...req.body,
+            _id: id
+        };
+
+        updatedItem.save();
+    } catch (err) {
         console.log(err);
         next(err);
     }
@@ -47,7 +70,7 @@ app.delete('/todo/:id', async (req, res, next) => {
 //error handler
 app.use((err, req, res, next) => {
     console.log(err);
-    res.status(err.status).send(err.message);
+    res.status(err.status || 500).send(err.message);
 });
 
 app.listen(PORT, () => {

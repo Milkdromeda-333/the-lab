@@ -5,7 +5,13 @@ interface Task {
 
 type TaskList = Task[];
 
+interface Todo {
+    todo: string,
+    isCompleted: boolean
+}
+
 export {
     Task,
-    TaskList
+    TaskList,
+    Todo
 }
