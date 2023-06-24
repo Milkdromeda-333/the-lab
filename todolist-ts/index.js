@@ -12,7 +12,6 @@ const form = document.forms[0];
 const list = document.getElementById('list');
 const input = document.getElementById("task");
 function appendListItem(task) {
-    // console.log(task)
     //  CREATE TASK CONTAINER
     const taskNode = createElement({ type: 'li', classes: ["list-container__task"] });
     // CREATE TASK
@@ -24,7 +23,7 @@ function appendListItem(task) {
     taskNode.insertAdjacentElement("beforeend", label);
     // CREATE EDIT BUTTON
     const editBtn = createElement({ type: 'button', content: 'Edit', classes: ["list-container__task-edit-btn", "list-container__task-btn"] });
-    editBtn.addEventListener("click", editTask);
+    editBtn.addEventListener("click", editTaskName);
     taskNode.insertAdjacentElement("beforeend", editBtn);
     // CREATE delete BUTTON
     const deleteBtn = createElement({ type: 'button', content: 'Delete', classes: ["list-container__task-delete-btn", "list-container__task-btn"] });
@@ -51,7 +50,6 @@ function createElement(data) {
     }
     return ele;
 }
-// TODO: WRITE ERROR STATE
 function toggleError(state) {
     const removeError = () => {
         form.classList.remove("error");
@@ -80,8 +78,8 @@ function toggleTaskCompletion() {
     console.log("toggle");
 }
 // TODO: add edit task functionality
-function editTask() {
-    console.log("edit");
+function editTaskName() {
+    console.log("edit name");
 }
 // TODO: add delete task functionality
 function deleteTask() {
@@ -91,13 +89,15 @@ function deleteTask() {
 function addTodosOnLoad() {
     return __awaiter(this, void 0, void 0, function* () {
         const fetchedTodos = yield getAllTodos();
-        for (let i = 0; i < fetchedTodos.length; i++) {
-            appendListItem(fetchedTodos[i]);
+        if (fetchedTodos instanceof Array) {
+            for (let i = 0; i < fetchedTodos.length; i++) {
+                appendListItem(fetchedTodos[i]);
+            }
         }
     });
 }
 addTodosOnLoad();
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", (e) => __awaiter(void 0, void 0, void 0, function* () {
     e.preventDefault();
     // if input value is not valid, put up an error.
     if (input.value == null || input.value == undefined || input.value === '') {
@@ -109,16 +109,19 @@ form.addEventListener("submit", (e) => {
     if (document.getElementsByClassName("form__error-message")[0]) {
         toggleError(false);
     }
-    const res = createTodo(input.value);
-    if (res instanceof Error) {
+    const res = yield createTodo(input.value);
+    if (typeof res !== 'string') {
         console.log("An error has ocurred! : ", res);
         toggleError(true);
         return;
     }
-    const newItem = {
-        todo: input.value,
-        isCompleted: false,
-        _id: res
-    };
-    appendListItem(newItem);
-});
+    if (typeof res === "string") {
+        const newItem = {
+            todo: input.value,
+            isCompleted: false,
+            _id: res
+        };
+        input.value = '';
+        appendListItem(newItem);
+    }
+}));

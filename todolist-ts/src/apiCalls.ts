@@ -1,26 +1,29 @@
+import { Todo } from "./interfaces";
+
 const url = "http://localhost:3030/todo";
 
-// get all todos
-function getAllTodos() {
-    const data = fetch(url)
-        .then(data => data.json())
-        .then(data => {
+function fetchClient<T>(url: string, options?: RequestInit): Promise<void | T> {
+
+    return fetch(url, options)
+        .then(res => res.json())
+        .then((data: T) => {
             return data
         })
-        .catch(err => console.log(err))
+        .catch((err): void => console.log(err));
+
+
+}
+
+// get all todos
+async function getAllTodos() {
+    const data = await fetchClient<Todo[]>(`${url}`);
     return data
 }
 
 // create a todo 
 function createTodo(newItemName: string) {
 
-    const options: {
-        method: string,
-        headers: {
-            "Content-type": string
-        }
-        body: string
-    } = {
+    const data = fetchClient<string>(url, {
         method: "POST",
         headers: {
             "Content-type": "application/json; charset=UTF-8"
@@ -29,23 +32,28 @@ function createTodo(newItemName: string) {
             todo: newItemName,
             isCompleted: false,
         })
-
-    }
-    const id = fetch(url, options)
-        .then(data => data.json())
-        .then(data => data)
-        .catch(err => {
-            console.log(err);
-            return err;
-        });
-
-    return id;
+    })
+    return data
 }
 // delete a todo
 
 // delete all todos
 
 // update a todo
+
+// toggle completion of task
+// function toggleTaskCompletion(id: number, isCompleted: boolean) {
+
+//     const options: RequestInit = {
+//         method: "PUT",
+//         headers: {
+//             "Content-type": "application/json; charset=UTF-8"
+//         },
+//         body: JSON.stringify({ isCompleted })
+//     }
+
+//     fetch(`${url}/id`, options)
+// }
 
 export {
     getAllTodos,

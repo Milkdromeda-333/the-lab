@@ -8,8 +8,6 @@ const input = document.getElementById("task") as HTMLInputElement;
 
 function appendListItem(task: Todo): void {
 
-    // console.log(task)
-
     //  CREATE TASK CONTAINER
     const taskNode = createElement({ type: 'li', classes: ["list-container__task"] });
 
@@ -23,7 +21,7 @@ function appendListItem(task: Todo): void {
 
     // CREATE EDIT BUTTON
     const editBtn = createElement({ type: 'button', content: 'Edit', classes: ["list-container__task-edit-btn", "list-container__task-btn"] });
-    editBtn.addEventListener("click", editTask);
+    editBtn.addEventListener("click", editTaskName);
     taskNode.insertAdjacentElement("beforeend", editBtn);
 
     // CREATE delete BUTTON
@@ -65,7 +63,6 @@ function createElement(data: {
     return ele;
 }
 
-// TODO: WRITE ERROR STATE
 function toggleError(state?: boolean): void {
 
     const removeError = () => {
@@ -97,8 +94,8 @@ function toggleTaskCompletion() {
 }
 
 // TODO: add edit task functionality
-function editTask() {
-    console.log("edit");
+function editTaskName() {
+    console.log("edit name");
 }
 
 // TODO: add delete task functionality
@@ -109,15 +106,17 @@ function deleteTask() {
 
 // Loads up the todo items on load of the website
 async function addTodosOnLoad(): Promise<void> {
-    const fetchedTodos: Todo[] = await getAllTodos();
-    for (let i = 0; i < fetchedTodos.length; i++) {
-        appendListItem(fetchedTodos[i]);
+    const fetchedTodos = await getAllTodos();
+    if (fetchedTodos instanceof Array) {
+        for (let i = 0; i < fetchedTodos.length; i++) {
+            appendListItem(fetchedTodos[i]);
+        }
     }
 }
 addTodosOnLoad();
 
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     // if input value is not valid, put up an error.
@@ -132,19 +131,24 @@ form.addEventListener("submit", (e) => {
         toggleError(false);
     }
 
-    const res = createTodo(input.value);
 
-    if (res instanceof Error) {
+    const res = await createTodo(input.value);
+
+    if (typeof res !== 'string') {
         console.log("An error has ocurred! : ", res);
         toggleError(true);
         return;
     }
 
-    const newItem = {
-        todo: input.value,
-        isCompleted: false,
-        _id: res
-    }
+    if (typeof res === "string") {
+        const newItem = {
+            todo: input.value,
+            isCompleted: false,
+            _id: res
+        }
 
-    appendListItem(newItem);
+        input.value = '';
+
+        appendListItem(newItem);
+    }
 })

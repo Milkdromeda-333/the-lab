@@ -50,6 +50,7 @@ app.delete('/todo/:id', async (req, res, next) => {
 
 // update item
 app.put('/todo/:id', (req, res, next) => {
+    // just send in the edited field in an object {isCompleted: true}
     try {
         const id = req.params.id;
         const item = ToDo.find({ _id: id });
@@ -59,6 +60,7 @@ app.put('/todo/:id', (req, res, next) => {
             ...req.body,
             _id: id
         };
+        console.log(updatedItem);
 
         updatedItem.save();
     } catch (err) {

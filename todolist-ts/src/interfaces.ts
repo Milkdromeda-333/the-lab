@@ -8,6 +8,8 @@ type TaskList = Task[];
 interface Todo {
     todo: string,
     isCompleted: boolean
+    _id: string,
+    _v?: number
 }
 
 export {
