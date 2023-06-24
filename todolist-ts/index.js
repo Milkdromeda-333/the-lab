@@ -10,7 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { getAllTodos, createTodo } from "./apiCalls";
 const form = document.forms[0];
 const list = document.getElementById('list');
+const input = document.getElementById("task");
 function appendListItem(task) {
+    // console.log(task)
     //  CREATE TASK CONTAINER
     const taskNode = createElement({ type: 'li', classes: ["list-container__task"] });
     // CREATE TASK
@@ -50,8 +52,28 @@ function createElement(data) {
     return ele;
 }
 // TODO: WRITE ERROR STATE
-function toggleError() {
-    return;
+function toggleError(state) {
+    const removeError = () => {
+        form.classList.remove("error");
+        document.getElementsByClassName("form__error-message")[0].remove();
+    };
+    if (state === undefined || state === null) {
+        form.classList.toggle("error");
+        const errorText = createElement({ type: "span", classes: ["form__error-message"], content: "An error occurred." });
+        input.insertAdjacentElement("beforebegin", errorText);
+    }
+    else {
+        if (state === true) {
+            if (!form.classList.contains("error")) {
+                form.classList.toggle("error");
+                const errorText = createElement({ type: "span", classes: ["form__error-message"], content: "An error occurred." });
+                input.insertAdjacentElement("beforebegin", errorText);
+            }
+        }
+        else {
+            removeError();
+        }
+    }
 }
 // TODO: add ability to toggle if a task is complete
 function toggleTaskCompletion() {
@@ -65,10 +87,11 @@ function editTask() {
 function deleteTask() {
     console.log("delete");
 }
+// Loads up the todo items on load of the website
 function addTodosOnLoad() {
     return __awaiter(this, void 0, void 0, function* () {
         const fetchedTodos = yield getAllTodos();
-        for (let i = 0; i <= fetchedTodos.length; i++) {
+        for (let i = 0; i < fetchedTodos.length; i++) {
             appendListItem(fetchedTodos[i]);
         }
     });
@@ -76,19 +99,24 @@ function addTodosOnLoad() {
 addTodosOnLoad();
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (document.getElementById("task").value == null || document.getElementById("task").value == undefined) {
+    // if input value is not valid, put up an error.
+    if (input.value == null || input.value == undefined || input.value === '') {
         console.log("Has to have a value!");
-        toggleError();
+        toggleError(true);
         return;
     }
-    const res = createTodo(document.getElementById("task").value);
+    // if the error is already present, turn it off
+    if (document.getElementsByClassName("form__error-message")[0]) {
+        toggleError(false);
+    }
+    const res = createTodo(input.value);
     if (res instanceof Error) {
         console.log("An error has ocurred! : ", res);
-        toggleError();
+        toggleError(true);
         return;
     }
     const newItem = {
-        todo: document.getElementById("task").value,
+        todo: input.value,
         isCompleted: false,
         _id: res
     };

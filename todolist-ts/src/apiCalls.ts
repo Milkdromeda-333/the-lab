@@ -5,7 +5,6 @@ function getAllTodos() {
     const data = fetch(url)
         .then(data => data.json())
         .then(data => {
-            console.log(data)
             return data
         })
         .catch(err => console.log(err))

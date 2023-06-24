@@ -4,6 +4,7 @@
     --color-secondary: #6b8e4e;
     --color-secondary-shade: #b2c5b2;
    --color-text: #d5dddf;
+   --color-red: #E34234;
 
    --border-radius: 5px;
 }
@@ -37,6 +38,16 @@ button:hover {
     outline: 3px solid var(--color-text);
 }
 
+form.error .form__input {
+    outline: var(--color-red) solid 3px;
+}
+
+form.error .form__error-message {
+    color: var(--color-red);
+    display: block;
+    margin-bottom: 4px;
+}
+
 .form__input {
     border-radius: var(--border-radius);
     border: none;
@@ -44,10 +55,10 @@ button:hover {
     padding: 5px;
 }
 
-
 .form__clear-btn:hover {
-    outline: 3px solid #E34234;
+    outline: 3px solid var(--color-red);
 }
+
 
 .list-container__task-list {
     width: 100%;
