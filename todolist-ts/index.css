@@ -91,7 +91,7 @@ form.error .form__error-message {
     color: var(--color-text);
 }
 
-.list-container__task-edit-btn {
+.list-container__task-delete-btn {
     margin-left: auto;
 }
 

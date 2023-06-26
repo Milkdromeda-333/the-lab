@@ -2,3 +2,9 @@
 Eventually i looked at a tutorial for a todo list in typescript by web dev simplified and he mentioned that I'll need to use a bunder to do node imports. And, by golly it worked.
 
 - HTTP request options can be typed as `RequestInit`
+
+- Try/Catch is not a substitude for async/await or .then().catch()... Dont forget to use it in Express when dealing with Mongoose.
+
+- For fetch request you will need to add async.await anywhere its used me thinks.
+
+- My error with the clear button was solved because I seen that i was using similar paths for my delete HTTP methods. I put the hard coded end point before the one that uses parameters and it worked. Also, before that I needed to add e.preventDefault() for the clear button in my js/ts.

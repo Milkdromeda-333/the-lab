@@ -1,9 +1,17 @@
 import type { Todo } from "./interfaces";
-import { getAllTodos, createTodo } from "./apiCalls";
+import {
+    getAllTodos,
+    createTodo,
+    toggleTaskCompletion as toggleCompletion,
+    deleteTask as deleteTodo,
+    clearTasks
+} from "./apiCalls";
 
 const form = document.forms[0] as HTMLElement;
 const list = document.getElementById('list') as HTMLElement;
 const input = document.getElementById("task") as HTMLInputElement;
+const submitBtn = document.getElementById("submitBtn") as HTMLInputElement;
+const clearBtn = document.getElementById("clearBtn") as HTMLInputElement;
 
 
 function appendListItem(task: Todo): void {
@@ -12,24 +20,30 @@ function appendListItem(task: Todo): void {
     const taskNode = createElement({ type: 'li', classes: ["list-container__task"] });
 
     // CREATE TASK
-    const input = createElement({ type: { element: 'input', inputType: "checkbox" }, classes: ["list-container__task--incomplete", "list-container__task"] });
+    const input = createElement({ type: { element: 'input', inputType: "checkbox" }, classes: ["list-container__task--incomplete", "list-container__task"] }) as HTMLInputElement;
     input.setAttribute("id", task.todo);
+    if (task.isCompleted) {
+        input.checked = true;
+    }
     const label = createElement({ type: "label", content: task.todo });
     label.setAttribute("for", task.todo);
+    input.addEventListener("change", function () {
+        toggleCompletion(task._id, task.isCompleted)
+    })
     taskNode.insertAdjacentElement("beforeend", input);
     taskNode.insertAdjacentElement("beforeend", label);
 
-    // CREATE EDIT BUTTON
-    const editBtn = createElement({ type: 'button', content: 'Edit', classes: ["list-container__task-edit-btn", "list-container__task-btn"] });
-    editBtn.addEventListener("click", editTaskName);
-    taskNode.insertAdjacentElement("beforeend", editBtn);
-
     // CREATE delete BUTTON
     const deleteBtn = createElement({ type: 'button', content: 'Delete', classes: ["list-container__task-delete-btn", "list-container__task-btn"] });
-    deleteBtn.addEventListener("click", deleteTask);
+    deleteBtn.addEventListener("click", async function () {
+        await deleteTodo(task._id);
+        list.innerHTML = ""
+        loadList();
+    });
     taskNode.insertAdjacentElement("beforeend", deleteBtn);
 
     list.appendChild(taskNode);
+
 }
 
 function createElement(data: {
@@ -88,24 +102,8 @@ function toggleError(state?: boolean): void {
     }
 }
 
-// TODO: add ability to toggle if a task is complete
-function toggleTaskCompletion() {
-    console.log("toggle");
-}
-
-// TODO: add edit task functionality
-function editTaskName() {
-    console.log("edit name");
-}
-
-// TODO: add delete task functionality
-function deleteTask() {
-    console.log("delete");
-
-}
-
 // Loads up the todo items on load of the website
-async function addTodosOnLoad(): Promise<void> {
+async function loadList(): Promise<void> {
     const fetchedTodos = await getAllTodos();
     if (fetchedTodos instanceof Array) {
         for (let i = 0; i < fetchedTodos.length; i++) {
@@ -113,10 +111,10 @@ async function addTodosOnLoad(): Promise<void> {
         }
     }
 }
-addTodosOnLoad();
+loadList();
 
 
-form.addEventListener("submit", async (e) => {
+submitBtn.addEventListener("click", async (e) => {
     e.preventDefault();
 
     // if input value is not valid, put up an error.
@@ -151,4 +149,9 @@ form.addEventListener("submit", async (e) => {
 
         appendListItem(newItem);
     }
+})
+
+clearBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+    await clearTasks();
 })

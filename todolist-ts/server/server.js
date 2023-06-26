@@ -26,11 +26,21 @@ app.get('/todo', async (req, res, next) => {
 
 // create a Todo
 app.post('/todo', async (req, res, next) => {
-    console.log(req.body);
     try {
         const newTodo = new ToDo(req.body);
         const response = await newTodo.save();
         res.status(201).send(response._id);
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+});
+
+// clear all todos
+app.delete('/todo/all', async (req, res, next) => {
+    try {
+        await ToDo.deleteMany({});
+        res.status(200).send();
     } catch (err) {
         console.log(err);
         next(err);
@@ -42,27 +52,19 @@ app.delete('/todo/:id', async (req, res, next) => {
     try {
         await ToDo.deleteOne({ _id: req.params.id });
         res.status(200).send();
-    } catch {
+    } catch (err) {
         console.log(err);
         next(err);
     }
 });
 
-// update item
-app.put('/todo/:id', (req, res, next) => {
-    // just send in the edited field in an object {isCompleted: true}
+
+// toggle isCompleted
+app.put('/todo/:id', async (req, res, next) => {
     try {
         const id = req.params.id;
-        const item = ToDo.find({ _id: id });
-
-        const updatedItem = {
-            ...item,
-            ...req.body,
-            _id: id
-        };
-        console.log(updatedItem);
-
-        updatedItem.save();
+        await ToDo.updateOne({ _id: id }, { $set: { isCompleted: req.body.isCompleted } });
+        res.status(200).send({ message: "Success" });
     } catch (err) {
         console.log(err);
         next(err);
@@ -72,7 +74,7 @@ app.put('/todo/:id', (req, res, next) => {
 //error handler
 app.use((err, req, res, next) => {
     console.log(err);
-    res.status(err.status || 500).send(err.message);
+    res.status(err.status || 500).send(err);
 });
 
 app.listen(PORT, () => {

@@ -5,13 +5,11 @@ const url = "http://localhost:3030/todo";
 function fetchClient<T>(url: string, options?: RequestInit): Promise<void | T> {
 
     return fetch(url, options)
-        .then(res => res.json())
+        .then(res => res?.json())
         .then((data: T) => {
             return data
         })
-        .catch((err): void => console.log(err));
-
-
+        .catch((err): void => { console.log(err) });
 }
 
 // get all todos
@@ -36,26 +34,35 @@ function createTodo(newItemName: string) {
     return data
 }
 // delete a todo
+async function deleteTask(id: string): Promise<void> {
+    await fetchClient(`${url}/${id}`, {
+        method: "DELETE"
+    })
+}
 
 // delete all todos
-
-// update a todo
+async function clearTasks() {
+    await fetchClient(`${url}/all`, {
+        method: "DELETE"
+    });
+}
 
 // toggle completion of task
-// function toggleTaskCompletion(id: number, isCompleted: boolean) {
+function toggleTaskCompletion(id: string, isCompleted: boolean): void {
 
-//     const options: RequestInit = {
-//         method: "PUT",
-//         headers: {
-//             "Content-type": "application/json; charset=UTF-8"
-//         },
-//         body: JSON.stringify({ isCompleted })
-//     }
-
-//     fetch(`${url}/id`, options)
-// }
+    fetchClient<void>(`${url}/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({ isCompleted: !isCompleted })
+    });
+}
 
 export {
     getAllTodos,
-    createTodo
+    createTodo,
+    toggleTaskCompletion,
+    deleteTask,
+    clearTasks
 };

@@ -10,11 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const url = "http://localhost:3030/todo";
 function fetchClient(url, options) {
     return fetch(url, options)
-        .then(res => res.json())
+        .then(res => res === null || res === void 0 ? void 0 : res.json())
         .then((data) => {
         return data;
     })
-        .catch((err) => console.log(err));
+        .catch((err) => { console.log(err); });
 }
 // get all todos
 function getAllTodos() {
@@ -38,17 +38,29 @@ function createTodo(newItemName) {
     return data;
 }
 // delete a todo
+function deleteTask(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield fetchClient(`${url}/${id}`, {
+            method: "DELETE"
+        });
+    });
+}
 // delete all todos
-// update a todo
+function clearTasks() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield fetchClient(`${url}/all`, {
+            method: "DELETE"
+        });
+    });
+}
 // toggle completion of task
-// function toggleTaskCompletion(id: number, isCompleted: boolean) {
-//     const options: RequestInit = {
-//         method: "PUT",
-//         headers: {
-//             "Content-type": "application/json; charset=UTF-8"
-//         },
-//         body: JSON.stringify({ isCompleted })
-//     }
-//     fetch(`${url}/id`, options)
-// }
-export { getAllTodos, createTodo };
+function toggleTaskCompletion(id, isCompleted) {
+    fetchClient(`${url}/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({ isCompleted: !isCompleted })
+    });
+}
+export { getAllTodos, createTodo, toggleTaskCompletion, deleteTask, clearTasks };
