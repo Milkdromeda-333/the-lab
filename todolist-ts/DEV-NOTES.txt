@@ -8,3 +8,14 @@ Eventually i looked at a tutorial for a todo list in typescript by web dev simpl
 - For fetch request you will need to add async.await anywhere its used me thinks.
 
 - My error with the clear button was solved because I seen that i was using similar paths for my delete HTTP methods. I put the hard coded end point before the one that uses parameters and it worked. Also, before that I needed to add e.preventDefault() for the clear button in my js/ts.
+
+
+- Conclusion
+
+I learned a lot about TypeScript by
+    1. Watching a course
+    2. Going through the docs
+    3. Watching youtube videos about the basics and topics that I wanted a better understandig of.
+    4. Creating a small project that will help me get the hang of it and expose the gaps in my knowledge
+
+I really enjoy TypeScript for it's code completion, and its ability to catch bugs before compile-time.
