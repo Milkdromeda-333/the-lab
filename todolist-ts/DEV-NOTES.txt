@@ -19,3 +19,10 @@ I learned a lot about TypeScript by
     4. Creating a small project that will help me get the hang of it and expose the gaps in my knowledge
 
 I really enjoy TypeScript for it's code completion, and its ability to catch bugs before compile-time.
+
+
+How to start up app:
+
+Start server by navigating to server folder and running `nodemon server` or `npm run server`
+Start TS compilation by running: `npm parcel index.html`
+And, then run run liver server for index.html
