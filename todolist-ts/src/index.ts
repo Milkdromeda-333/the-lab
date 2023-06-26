@@ -19,17 +19,34 @@ function appendListItem(task: Todo): void {
     //  CREATE TASK CONTAINER
     const taskNode = createElement({ type: 'li', classes: ["list-container__task"] });
 
-    // CREATE TASK
-    const input = createElement({ type: { element: 'input', inputType: "checkbox" }, classes: ["list-container__task--incomplete", "list-container__task"] }) as HTMLInputElement;
+    // CREATE TASK Checkbox and label
+    const input = createElement({
+        type: {
+            element: 'input',
+            inputType: "checkbox"
+        },
+        classes: ["list-container__task--input"]
+    }) as HTMLInputElement;
     input.setAttribute("id", task.todo);
     if (task.isCompleted) {
         input.checked = true;
     }
-    const label = createElement({ type: "label", content: task.todo });
+
+    const labelClasses: string[] = [];
+    if (task.isCompleted) {
+        labelClasses.push("list-container__task-label--complete")
+    }
+    const label = createElement({
+        type: "label",
+        content: task.todo,
+        classes: labelClasses
+    });
     label.setAttribute("for", task.todo);
     input.addEventListener("change", function () {
-        toggleCompletion(task._id, task.isCompleted)
+        toggleCompletion(task._id, task.isCompleted);
+        label.classList.toggle("list-container__task-label--complete");
     })
+
     taskNode.insertAdjacentElement("beforeend", input);
     taskNode.insertAdjacentElement("beforeend", label);
 
@@ -86,13 +103,13 @@ function toggleError(state?: boolean): void {
 
     if (state === undefined || state === null) {
         form.classList.toggle("error");
-        const errorText = createElement({ type: "span", classes: ["form__error-message"], content: "An error occurred." });
+        const errorText = createElement({ type: "span", classes: ["form__error-message"], content: "Value cannot be empty." });
         input.insertAdjacentElement("beforebegin", errorText);
     } else {
         if (state === true) {
             if (!form.classList.contains("error")) {
                 form.classList.toggle("error");
-                const errorText = createElement({ type: "span", classes: ["form__error-message"], content: "An error occurred." });
+                const errorText = createElement({ type: "span", classes: ["form__error-message"], content: "Value cannot be empty." });
                 input.insertAdjacentElement("beforebegin", errorText);
             }
 
@@ -105,6 +122,7 @@ function toggleError(state?: boolean): void {
 // Loads up the todo items on load of the website
 async function loadList(): Promise<void> {
     const fetchedTodos = await getAllTodos();
+    list.innerHTML = "";
     if (fetchedTodos instanceof Array) {
         for (let i = 0; i < fetchedTodos.length; i++) {
             appendListItem(fetchedTodos[i]);
@@ -154,4 +172,5 @@ submitBtn.addEventListener("click", async (e) => {
 clearBtn.addEventListener("click", async function (e) {
     e.preventDefault();
     await clearTasks();
+    await loadList();
 })

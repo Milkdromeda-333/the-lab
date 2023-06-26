@@ -66,12 +66,15 @@ form.error .form__error-message {
 
     border-top: 4px solid var(--color-secondary-shade);
     vertical-align: middle;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .list-container__task {
     font-size: 1.5rem;
     list-style: none;
-    margin-bottom: .8rem;
 
     display: flex;
     justify-content: start;
@@ -79,17 +82,15 @@ form.error .form__error-message {
     gap: 4px;
 }
 
-.list-container__task input[type="checkbox"] {
-    margin: 0;
+.list-container__task--input {
+   accent-color: var(--color-secondary); 
 }
 
-.list-container__task input[type="checkbox"]:checked {
-    margin: 0;
+.list-container__task-label--complete {
+    color: var(--color-secondary-shade);
+    text-decoration: line-through;
 }
 
-.list-container__task--incomplete {
-    color: var(--color-text);
-}
 
 .list-container__task-delete-btn {
     margin-left: auto;
