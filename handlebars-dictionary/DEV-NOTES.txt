@@ -1,0 +1,22 @@
+- Handlebars isnt very well documented now-a-days. My plan i to earn how to use her by making a todo list and documenting very well.
+- Okay this is how to make handlebars work as far as I understand at the moment:
+    1. starting in the HTML, make a root element to add elements to.
+    2. after, before you create a template in the HTML add script tag for handlebars.
+    3. after handlebars script tag, add script tag to house template.
+    4. finally add script tag for your own javascript file(s)
+    5. in js file... select template tag from id. run that through `Handlebars.compile()` and catch the value for that.
+    6. add values for the template to an object and call the compoled template function with this object.
+    7. finally, add the result from passing data to the compiled template to the innerHTML of the root element.
+
+-   You can make custom functions using `Handlebars.registerHelper()`, `{{log .}}` to log `this`
+
+- Pay close attention to the logic! It can be confusing. 
+
+Challneges:
+- Had a hard time figuring out how to access elements in an array the regular way. During my research I learned a lot, like the fact that you can omit the `this` in each loops. Finally, I found the solution. It was that you have to use dot notation, not brackets alone. 
+source: https://stackoverflow.com/questions/8044219/how-do-i-access-an-access-array-item-by-index-in-handlebars
+
+- I fought with fetch web api for a sec. It ws one bug after another. But, my excellent problem solving skills really came in clutch and I worked through everything.
+It started with not getting any data form the endpoint, so I checked that the url was correct, but found that I was not catching the value of the searchbar, and after that that I had the event listener attached to the wrong element. 
+Then, it was that I wasnt getting the response body, it needed res.json(). 
+THEN, I tussled with passing in the data to the template correctly based n the structure of the object. Eventually I got it going over it multiple times. In retrospect i couldve just looked at the way I handed in the word key. Then, I ended it with jus trefactoring everything by outting the handlebars functionality that only needs to be ran with the event listener inside of that event handler. It looks much better after the refactor.

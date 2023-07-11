@@ -9,6 +9,9 @@ Eventually i looked at a tutorial for a todo list in typescript by web dev simpl
 
 - My error with the clear button was solved because I seen that i was using similar paths for my delete HTTP methods. I put the hard coded end point before the one that uses parameters and it worked. Also, before that I needed to add e.preventDefault() for the clear button in my js/ts.
 
+- restart that VSCode if all else fails
+
+- Use HTTPException only to get an error in the backend/Node
 
 - Conclusion
 

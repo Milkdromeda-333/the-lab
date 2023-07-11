@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handlebars todo list</title>
+    <style>
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Dictionary app</h1>
+
+    <div>
+        <span>Search a word</span>
+        <input id="searchInput" type="search" />
+        <button id="searchBtn">Search</button>
+
+        <div class="results"></div>
+
+    </div>
+
+    <!-- this is the root element to insert some html -->
+    <div id="hbs-root"></div>
+
+    <!-- before the javascript add the handlebar dependency file -->
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+    <!-- template to isert data into -->
+    <script id="results-template" type="text/x-handlebars-template">
+        <div id="result" class="result">
+
+            <h2>{{word}}</h2>
+
+            {{#each definitions}}
+            
+                <div>
+                    {{log .}}
+
+                    <span class="bold">{{partOfSpeech}}</span>
+
+                    
+                    {{#if (isArrOneEleLong definitions)}}
+                    
+                        <ul>
+                            <li>{{definitions.[0].definition}}</li>
+                        </ul>
+
+                    {{else}}
+                        <ol>
+                            {{#each definitions}}
+                                <li>{{definition}}</li>
+                            {{/each}}
+                        </ol>
+                    {{/if}}
+                    
+
+                </div>
+
+            {{/each}}
+            
+        </div>
+    </script>
+
+    <!-- source javascript -->
+    <script src="./index.js"></script>
+
+</body>
+
+</html>
