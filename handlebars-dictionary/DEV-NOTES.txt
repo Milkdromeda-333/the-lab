@@ -12,6 +12,32 @@
 
 - Pay close attention to the logic! It can be confusing. 
 
+- Math and JS is not performed in the templates, they should be kept simple.
+
+- When using bundled JS here (like helpers in a different file), use $ before helper functions. `{{$getAge year}}`
+
+- in a `#each` block you can take out values and its index by doing `{{#each person as |name key|}}`. If person is an array name will refer to the value in the array at that index and key is the index. If Person is an object name will be the key/field for that iteration and key is its value.
+
+- the with built-in helper allows you to change the context inside of it to access values in a more readable way.
+example:
+```
+person = {
+    name: "bertha long",
+    age: 22,
+    location: {
+        current: "school"
+        home: {
+            state: "Texas"
+            city: "dallas"
+        }
+    }
+}
+
+{{#with locaion/home}}
+    <p>{{state}}</p>
+{{/with}}
+```
+
 Challneges:
 - Had a hard time figuring out how to access elements in an array the regular way. During my research I learned a lot, like the fact that you can omit the `this` in each loops. Finally, I found the solution. It was that you have to use dot notation, not brackets alone. 
 source: https://stackoverflow.com/questions/8044219/how-do-i-access-an-access-array-item-by-index-in-handlebars
