@@ -1,0 +1,3 @@
+- passport initialization:
+    - Initialize passport at the top of the server with the middleware.
+    - LocalStrategy takes options to configure the names sucas username and password if they are different, and it takes the function used to authenticate a user
