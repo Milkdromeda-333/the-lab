@@ -1,0 +1,131 @@
+.navbar {
+    border-bottom: 1px solid white;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+    padding: .5rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.navbar__logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+.navbar__logo-img {
+    width: 40px;
+}
+
+.navbar__menu {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.eventlist-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-rows: 1fr; */
+    gap: 16px;
+    width: 90%;
+    margin-block: 1rem;
+}
+
+.card {
+    border: 1px solid white;
+    padding: 10px;
+    transition: all ease 100ms;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+}
+
+.card:hover {
+    border-width: 4px;
+}
+
+.card img {
+    width: 100%;
+}
+
+.card a {
+    background-color: white;
+    color: black;
+    padding: 2px 6px;
+}
+
+.event-page-container {
+    background: rgb(0,0,0);
+    background: -moz-linear-gradient(0deg, rgba(0,0,0,1) 62%, rgba(255,255,255,1) 62%);
+    background: -webkit-linear-gradient(0deg, rgba(0,0,0,1) 62%, rgba(255,255,255,1) 62%);
+    background: linear-gradient(0deg, rgba(0,0,0,1) 62%, rgba(255,255,255,1) 62%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#ffffff",GradientType=1);
+}
+
+.event-page-container h1 {
+    color: black;
+    padding: 1rem;
+    font-size: 4rem;
+    text-align: center;
+}
+
+.event-page__card {
+    background-color: gray;
+    max-width: 50%;
+    padding: 1rem;
+
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: auto auto;
+    grid-template-areas: "image date" "image address";
+    
+    margin: 0 auto;
+}
+
+.event-page-container__img {
+    width: 100%;
+    clip-path: circle();
+
+    place-self: center;
+    grid-area: image;
+}
+
+.event-page__date {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    grid-area: date;
+}
+
+.event-page__address {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    grid-area: address;
+}
+
+.event-page-container__data {
+    text-align: center;
+    margin: 1rem;
+}
+
+.filter {
+    margin: 0 auto;
+    text-align: center;
+    background-color: grey;
+    width: 50%;
+    padding-block: 1rem;
+}
+
+.footer {
+    border-top: 1px solid white;
+    text-align: center;
+    padding-block: 1rem;
+}
