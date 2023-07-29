@@ -1,5 +1,5 @@
 module.exports = {
-    isAuthenticated: (req, res, next) => {
+    userIsAuthenticated: (req, res, next) => {
         // if user is authenticated carry on, reroute to login screen
         if (req.isAuthenticated()) {
             console.log(req.isAuthenticated());
@@ -11,7 +11,7 @@ module.exports = {
     isNotAuthenticated: (req, res, next) => {
         // if user is not authenticated, carry on, otherwise let them into the route
         // main use is so that authenticated users cant go to login or register page
-        console.log('checking if authenticated....');
+        console.log(req);
         if (req.isAuthenticated()) {
             console.log('user is authenticated');
 

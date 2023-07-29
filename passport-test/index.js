@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const flash = require('express-flash');
 const PORT = 3000;
 const initializePassport = require('./config/passport');
-const { isAuthenticated, isNotAuthenticated } = require('../middleware/auth');
+const { userIsAuthenticated, isNotAuthenticated } = require('./middleware/auth.js');
 
 
 const app = express();
@@ -15,7 +15,6 @@ app.use(express.json());
 app.set('view-engine', 'ejs');
 app.use(morgan('dev'));
 app.use(flash());
-app.use(passport.initialize()); // stes up passport
 
 
 app.use(session({
@@ -27,18 +26,22 @@ app.use(session({
     saveUninitialized: false, // save when session is 'new but not modified'
 }));
 
-app.use(passport.session()); // persists sesssions || acts as a middleware to alter the req object and change the 'user' value that is currently the session id (from the client cookie) into the true deserialized user object.
-
-const users = [];
-
 initializePassport(
     passport,
     (username) => users.find(user => user.username === username),
     id => users.find(user => user.id === id)
 );
 
+app.use(passport.session()); // persists sesssions || acts as a middleware to alter the req object and change the 'user' value that is currently the session id (from the client cookie) into the true deserialized user object.
+// passport.session() calls deserializeUser on each request, which queries the mongodb using the user._id that was initially loaded to req.user by serializeUser and stores the more information about user in the req.user.
+app.use(passport.initialize()); // stes up passport
+
+const users = [];
+
+
 app.route('/')
-    .get(isAuthenticated, (req, res) => {
+    .get(userIsAuthenticated, (req, res) => {
+        console.log(req.user);
         res.render('index.ejs', { name: req.user.username });
     });
 

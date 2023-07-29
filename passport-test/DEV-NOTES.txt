@@ -1,3 +1,9 @@
 - passport initialization:
     - Initialize passport at the top of the server with the middleware.
-    - LocalStrategy takes options to configure the names sucas username and password if they are different, and it takes the function used to authenticate a user
+    - LocalStrategy takes options to configure the names sucas username and password if they are 
+    different, and it takes the function used to authenticate a user
+
+- serializeUser and deserializeUser
+    These two functions are called on each request because of passport.session() and passport.initialize().
+    - serializeUser stores data in req.session.passport.user when sue is authenticated and is used as an id in the session store to identify sessions of that user.
+    - deserializeUser is called on each subsequent request after the user is first authenticated/a session is initialized. It grabs the user object gotten that it retrives form the session store and attaches it to req.user. 
